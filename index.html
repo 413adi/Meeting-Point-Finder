@@ -347,6 +347,14 @@
     <div id="map"></div>
     
     <script>
+        // Global variables
+        let circleGroups = [];
+        let distances = [
+            { value: 100, color: '#8B5A2B' },
+            { value: 150, color: '#606C38' }
+        ];
+        let intersectionLayer = null;
+        
         // Create map legend function
         function createMapLegend() {
             // Remove existing legend if any
@@ -420,12 +428,10 @@
             if (query.length < 3) return []; // Require at least 3 characters
             
             try {
-                // Use a CORS proxy to avoid CORS issues on GitHub Pages
+                // Using geocode.maps.co as a CORS-enabled endpoint (works on GitHub Pages)
                 const timestamp = new Date().getTime();
-                const baseUrl = 'https://nominatim.openstreetmap.org/search';
                 const params = `format=json&q=${encodeURIComponent(query)}&limit=10&addressdetails=1&namedetails=1&accept-language=en&_=${timestamp}`;
                 
-                // Try with GeoCors proxy (a public CORS proxy specifically for geocoding)
                 const response = await fetch(`https://geocode.maps.co/search?${params}`, {
                     headers: {
                         'Accept': 'application/json'
@@ -437,7 +443,6 @@
                 }
                 
                 const data = await response.json();
-                console.log("API returned:", data.length, "results");
                 
                 // Format the results to match our expected structure
                 return data.map(place => ({
@@ -459,7 +464,6 @@
             
             try {
                 const results = await searchLocations(input);
-                console.log("Search returned:", results.length, "locations");
                 return results;
             } catch (error) {
                 console.error("Error searching locations:", error);
@@ -473,7 +477,6 @@
             dropdown.empty();
             
             if (suggestions.length > 0) {
-                console.log("Found suggestions:", suggestions.length);
                 suggestions.forEach(place => {
                     // Format display name
                     const displayText = place.name;
@@ -572,4 +575,7 @@
                 const lng = $(this).data('lng');
                 const name = $(this).val();
                 
-    
+                if (lat && lng) {
+                    locations.push({
+                        name: name,
+                        lat: lat
