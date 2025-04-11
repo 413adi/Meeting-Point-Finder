@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Map Radius Circles</title>
+    <title>Meeting Point Finder</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <!-- Leaflet.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <!-- jQuery for AJAX and DOM manipulation -->
+    <!-- jQuery for DOM manipulation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Google Fonts - Adding elegant fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -111,45 +111,6 @@
             background-color: #795548;
         }
         
-        .legend {
-            margin-top: 15px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            background-color: #EFEBE9;
-            padding: 12px;
-            border-radius: 6px;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-        }
-        
-        #map {
-            flex: 1;
-            height: 70vh; /* Set explicit height for mobile */
-            z-index: 1;
-        }
-        
-        #map {
-            position: relative;
-            flex: 1;
-            height: 70vh; /* Set explicit height for mobile */
-            z-index: 1;
-            border-top: 6px solid #8D6E63;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);
-        }
-        
         .dropdown {
             position: absolute;
             background-color: #FFFAF6;
@@ -178,21 +139,6 @@
             background-color: #EFEBE9;
         }
         
-        /* Loading indicator */
-        .loading-indicator {
-            display: none;
-            margin-left: 10px;
-            color: #8D6E63;
-        }
-        
-        /* Error message */
-        .error-message {
-            color: #B71C1C;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        /* Custom distance input */
         .distance-customization {
             margin-top: 15px;
             padding: 15px;
@@ -200,48 +146,17 @@
             border-radius: 6px;
         }
         
-        /* Collapsible sections for mobile */
-        .section-header {
-            cursor: pointer;
+        .distance-inputs {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .section-header h3 {
-            margin: 0;
-        }
-        
-        .section-header .toggle-icon:after {
-            content: '▼';
-            font-size: 12px;
-        }
-        
-        .section-header.collapsed .toggle-icon:after {
-            content: '►';
-        }
-        
-        .section-content {
-            transition: max-height 0.3s ease;
-            overflow: hidden;
-            max-height: 1000px;
-        }
-        
-        .section-content.collapsed {
-            max-height: 0;
-        }
-        
-        .distance-inputs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
+            width: 100%;
         }
         
         .distance-input-group {
             display: flex;
             align-items: center;
+            width: 48%;
         }
         
         .distance-input {
@@ -256,7 +171,85 @@
         
         .distance-input:focus {
             outline: none;
-            border-color: #8D6E63;
+        }
+        
+        .distance-input-group label {
+            margin-right: 8px;
+            font-weight: 500;
+        }
+        
+        .color-picker {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: 1px solid #BCAAA4;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .apply-distances-btn {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #5D4037;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        
+        .apply-distances-btn:hover {
+            background-color: #4E342E;
+        }
+        
+        #map {
+            position: relative;
+            flex: 1;
+            height: 70vh; /* Set explicit height for mobile */
+            z-index: 1;
+            border-top: 6px solid #8D6E63;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            #map {
+                height: 70vh;
+                min-height: 500px; /* Ensure minimum height on small screens */
+            }
+        }
+        
+        /* Map legend on map */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Raleway', sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .map-legend-color {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(0, 0, 0, 0.2);
         }
         
         /* Scrollable indication */
@@ -300,32 +293,22 @@
             }
         }
         
-        .distance-input-group label {
-            margin-right: 8px;
-            font-weight: 500;
+        /* Custom styles for the geocoder control */
+        .leaflet-control-geocoder {
+            border: 2px solid #8D6E63 !important;
         }
         
-        .color-picker {
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            border: 1px solid #BCAAA4;
-            border-radius: 4px;
-            cursor: pointer;
+        .leaflet-control-geocoder-form input {
+            font-family: 'Raleway', sans-serif !important;
         }
         
-        .apply-distances-btn {
-            margin-top: 15px;
-            padding: 8px 15px;
-            background-color: #5D4037;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            width: 100%;
+        .leaflet-control-geocoder-alternatives li:hover {
+            background-color: #EFEBE9 !important;
+        }
+        
+        .leaflet-control-geocoder-alternatives-minimized {
+            background-color: #8D6E63 !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -388,11 +371,41 @@
             $('#map').append(legend);
         }
         
-        // Toggle section functionality
-        function setupCollapsibleSections() {
-            $('#customize-header').on('click', function() {
-                $(this).toggleClass('collapsed');
-                $('#customize-content').toggleClass('collapsed');
+        // Handle scroll behavior in controls
+        function checkScrollIndicator() {
+            const distance2Input = $('#distance2');
+            const controlsContainer = $('.controls');
+            
+            // Only show the scroll indicator if the Distance 2 input is not fully visible
+            function checkInputVisibility() {
+                // Check if Distance 2 input exists
+                if (distance2Input.length === 0) {
+                    $('.scroll-indicator').hide();
+                    return;
+                }
+                
+                const inputBottom = distance2Input.offset().top + distance2Input.outerHeight();
+                const containerBottom = controlsContainer.offset().top + controlsContainer.height();
+                
+                // If the input is partially or fully below the visible area
+                if (inputBottom > containerBottom) {
+                    $('.scroll-indicator').show();
+                } else {
+                    $('.scroll-indicator').hide();
+                }
+            }
+            
+            // Initial check
+            checkInputVisibility();
+            
+            // Recheck when scrolling
+            $('.controls').on('scroll', function() {
+                checkInputVisibility();
+            });
+            
+            // Recheck on window resize
+            $(window).on('resize', function() {
+                checkInputVisibility();
             });
         }
         
@@ -402,62 +415,20 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
         
-        // Store selected locations and their circles
-        const selectedLocations = [];
-        let circleGroups = [];
-        
-        // Store distance and color values
-        let distances = [
-            { value: 100, color: '#8B5A2B', opacity: 0.15 },
-            { value: 150, color: '#606C38', opacity: 0.15 }
-        ];
-        
-        // Initialize distance inputs
-        $('#distance1').val(distances[0].value);
-        $('#distance2').val(distances[1].value);
-        
-        // Update legend
-        function updateLegend() {
-            // Clear the legend
-            $('#legend').empty();
-            
-            // Add items for each distance
-            distances.forEach(distance => {
-                const legendItem = $('<div>').addClass('legend-item');
-                const colorSpan = $('<span>')
-                    .addClass('legend-color')
-                    .css('background-color', distance.color);
-                const textSpan = $('<span>').text(`${distance.value}km`);
-                
-                legendItem.append(colorSpan, textSpan);
-                $('#legend').append(legendItem);
-            });
-        }
-        
-        // Function to apply distance changes
-        $('#apply-distances-btn').on('click', function() {
-            // Update distances array
-            distances[0].value = parseInt($('#distance1').val());
-            distances[1].value = parseInt($('#distance2').val());
-            
-            // Update map legend
-            createMapLegend();
-            
-            // Redraw circles
-            updateCircles();
-        });
-        
         // Function to search locations using Nominatim API
         async function searchLocations(query) {
             if (query.length < 3) return []; // Require at least 3 characters
             
             try {
-                // Add a random parameter to avoid caching issues
+                // Use a CORS proxy to avoid CORS issues on GitHub Pages
                 const timestamp = new Date().getTime();
-                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=10&addressdetails=1&countrycodes=&namedetails=1&accept-language=en&_=${timestamp}`, {
+                const baseUrl = 'https://nominatim.openstreetmap.org/search';
+                const params = `format=json&q=${encodeURIComponent(query)}&limit=10&addressdetails=1&namedetails=1&accept-language=en&_=${timestamp}`;
+                
+                // Try with GeoCors proxy (a public CORS proxy specifically for geocoding)
+                const response = await fetch(`https://geocode.maps.co/search?${params}`, {
                     headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Map Radius Circles Website' // It's good practice to identify your application
+                        'Accept': 'application/json'
                     }
                 });
                 
@@ -525,6 +496,69 @@
             }
         }
         
+        // Setup input event listeners
+        function setupInputListeners(inputElement) {
+            // Debounce function to prevent too many API calls
+            let debounceTimeout;
+            
+            // Input change event
+            $(inputElement).on('input', async function() {
+                const value = $(this).val();
+                
+                // Clear previous timeout
+                clearTimeout(debounceTimeout);
+                
+                // Set new timeout
+                debounceTimeout = setTimeout(async () => {
+                    if (value.length >= 3) {
+                        const suggestions = await filterLocations(value);
+                        showSuggestions(inputElement, suggestions);
+                    } else {
+                        $(inputElement).siblings('.dropdown').hide();
+                    }
+                }, 300); // 300ms debounce time
+            });
+            
+            // Focus event
+            $(inputElement).on('focus', async function() {
+                const value = $(this).val();
+                if (value.length >= 3) {
+                    const suggestions = await filterLocations(value);
+                    showSuggestions(this, suggestions);
+                }
+            });
+            
+            // Blur event (close dropdown when clicking outside)
+            $(inputElement).on('blur', function() {
+                // Delayed to allow click on dropdown item
+                setTimeout(() => {
+                    $(this).siblings('.dropdown').hide();
+                    // Update circles after selection is complete
+                    updateCircles();
+                }, 200);
+            });
+        }
+        
+        // Function to add a new location input field
+        function addLocationInput() {
+            const newInputGroup = $('<div>').addClass('location-input-group');
+            const newInput = $('<input>').addClass('location-input').attr('type', 'text').attr('placeholder', 'Enter a location (min. 3 characters)');
+            const newDropdown = $('<div>').addClass('dropdown');
+            const removeBtn = $('<button>').addClass('remove-location-btn').text('-');
+            
+            // Setup event listeners for the new input
+            setupInputListeners(newInput);
+            
+            // Remove button handler
+            removeBtn.on('click', function() {
+                newInputGroup.remove();
+                updateCircles();
+            });
+            
+            newInputGroup.append(newInput, newDropdown, removeBtn);
+            $('#location-inputs').append(newInputGroup);
+        }
+        
         // Function to draw circles
         function drawCircles() {
             // Clear existing circles
@@ -538,53 +572,4 @@
                 const lng = $(this).data('lng');
                 const name = $(this).val();
                 
-                if (lat && lng && name) {
-                    locations.push({ name, lat, lng });
-                    console.log("Added location:", name, lat, lng);
-                }
-            });
-            
-            console.log("Drawing circles for", locations.length, "locations");
-            
-            // Draw circles for each location
-            locations.forEach(location => {
-                const latLng = [location.lat, location.lng];
-                
-                // Create a group for this location's circles
-                const locationGroup = L.layerGroup();
-                
-                // Add marker
-                const marker = L.marker(latLng).addTo(locationGroup);
-                marker.bindPopup(location.name);
-                
-                // Add circles for each distance
-                distances.forEach((distance, index) => {
-                    const circle = L.circle(latLng, {
-                        radius: distance.value * 1000, // Convert km to meters
-                        color: distance.color,
-                        fillColor: distance.color,
-                        fillOpacity: distance.opacity,
-                        weight: 2
-                    }).addTo(locationGroup);
-                    
-                    // Add a popup to show the distance
-                    circle.bindPopup(`${distance.value}km from ${location.name}`);
-                });
-                
-                // Add to map
-                locationGroup.addTo(map);
-                circleGroups.push(locationGroup);
-            });
-            
-            // If there are locations, fit map to show all circles with their full radii
-            if (locations.length > 0) {
-                // Create bounds that include all circles with their radii
-                const bounds = L.latLngBounds();
-                
-                locations.forEach(location => {
-                    const latLng = L.latLng(location.lat, location.lng);
-                    
-                    // Get the maximum distance
-                    const maxDistance = Math.max(...distances.map(d => d.value));
-                    
-                 
+    
